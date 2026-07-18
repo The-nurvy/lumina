@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.musicpulse"
+    namespace = "com.example.Lumina"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.musicpulse"
+        applicationId = "com.example.Lumina"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
