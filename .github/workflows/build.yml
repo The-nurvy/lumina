@@ -1,4 +1,5 @@
 name: Build Signed Android APK
+
 on:
   push:
     branches: [ "main" ]
@@ -8,37 +9,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Setup Java JDK
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: gradle
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-    - name: Build Release APK
-      run: ./gradlew assembleRelease
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
 
-    - name: Decode Keystore
-      run: |
-        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.keystore
-
-    - name: Sign the APK
-      run: |
-        mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/Lumina-Signed.apk
-        
-        export BUILD_TOOLS_VERSION=$(ls $ANDROID_HOME/build-tools | tail -1)
-        export APKSIGNER=$ANDROID_HOME/build-tools/$BUILD_TOOLS_VERSION/apksigner
-        
-        $APKSIGNER sign --ks release.keystore --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} --ks-key-alias ${{ secrets.KEY_ALIAS }} --key-pass pass:${{ secrets.KEY_PASSWORD }} app/build/outputs/apk/release/Lumina-Signed.apk
-
-    - name: Upload Signed APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: Lumina-Signed-App
-        path: app/build/outputs/apk/release/Lumina-Signed.apk
+      - name: Upload Unsigned APK (Fallback)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lumina-Unsigned-App
+          path: app/build/outputs/apk/release/*.apk
