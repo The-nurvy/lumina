@@ -4,33 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.Lumina"
+    namespace = "io.lumina.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.Lumina"
+        applicationId = "io.lumina.app"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-    }
-
-    signingConfigs {
-        create("release") {
-            val keystorePath = System.getenv("KEYSTORE_PATH")
-            if (keystorePath != null) {
-                storeFile = file(keystorePath)
-                storePassword = System.getenv("KEYSTORE_PASSWORD")
-                keyAlias = System.getenv("KEY_ALIAS")
-                keyPassword = System.getenv("KEY_PASSWORD")
-            }
-        }
-    }
-
-    buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("release")
-        }
     }
 
     buildFeatures {
@@ -61,7 +43,4 @@ dependencies {
     
     // Google Nearby Connections
     implementation("com.google.android.gms:play-services-nearby:19.0.0")
-    
-    // TarsosDSP - plain jar (not AAR) including the android.be.tarsos.dsp.io.android package
-    implementation("com.github.st-h:TarsosDSP:2.4.1")
 }
